@@ -210,56 +210,48 @@ function CareerSimulator(){
 }
 
 function HackerConsole(){
+  const [input, setInput] = useState("");
+  const [logs, setLogs] = useState(["system ready"]);
 
-  const [input,setInput]=useState("")
-  const [logs,setLogs]=useState(["system ready"])
+  // Указываем, что ключами могут быть любые строки, а значениями - строки
+  const commands: Record<string, string> = {
+    help: "commands: help connect deploy",
+    connect: "connecting to network...",
+    deploy: "deploying startup..."
+  };
 
-  const commands:any={
-    help:"commands: help connect deploy",
-    connect:"connecting to network...",
-    deploy:"deploying startup..."
-  }
-
-  const run=()=>{
-
-    const response=commands[input] || "unknown command"
-
-    setLogs([...logs,"> "+input,response])
-
-    setInput("")
+  const run = () => {
+    // Теперь TS не будет ругаться на поиск по ключу
+    const response = commands[input.toLowerCase().trim()] || "unknown command";
+    setLogs([...logs, "> " + input, response]);
+    setInput("");
   }
 
   return(
-
-    <div style={{marginTop:80,fontFamily:"monospace"}}>
-
+    <div style={{marginTop:80, fontFamily:"monospace"}}>
       <h2>Hacker Console</h2>
-
       <div style={{
         background:"#000",
         padding:20,
         height:200,
         overflow:"auto",
-        color:"#00ff90"
+        color:"#00ff90",
+        border: "1px solid #00ff90"
       }}>
-
         {logs.map((l,i)=>(
           <div key={i}>{l}</div>
         ))}
-
       </div>
-
       <input
         value={input}
         onChange={e=>setInput(e.target.value)}
         onKeyDown={e=>e.key==="Enter" && run()}
-        style={{width:"100%",padding:10,background:"#111",color:"#00ff90"}}
+        placeholder="type 'help'..."
+        style={{width:"100%", padding:10, background:"#111", color:"#00ff90", border: "1px solid #00ff90", borderTop: "none"}}
       />
-
     </div>
   )
 }
-
 function MatrixBackground(){
 
   return(
