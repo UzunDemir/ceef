@@ -46,34 +46,31 @@ export default function App() {
   )
 }
 
-function InternetGlobe(){
+function InternetGlobe() {
+  // Явно указываем, что это массив массивов, содержащих ровно 3 числа
+  const connections: [number, number, number][][] = useMemo(() => [
+    [[0, 0, 2], [1, 1, 1]],
+    [[0, 0, 2], [-1, 1, -1]],
+    [[0, 0, 2], [2, -1, 0]]
+  ], []);
 
-  const connections=[
-    [[0,0,2],[1,1,1]],
-    [[0,0,2],[-1,1,-1]],
-    [[0,0,2],[2,-1,0]]
-  ]
+  const lines = useMemo(() => connections.map((c, i) =>
+    <Line key={i} points={c} color="cyan" lineWidth={1} />
+  ), [connections]);
 
-  const lines=useMemo(()=>connections.map((c,i)=>
-    <Line key={i} points={c} color="cyan" lineWidth={1}/>
-  ),[])
-
-  return(
-    <div style={{height:500}}>
+  return (
+    <div style={{ height: 500 }}>
       <Canvas>
-        <ambientLight intensity={0.6}/>
-        <directionalLight position={[3,3,3]}/>
-
-        <Sphere args={[2,64,64]}>
-          <meshStandardMaterial wireframe color="cyan"/>
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[3, 3, 3]} />
+        <Sphere args={[2, 64, 64]}>
+          <meshStandardMaterial wireframe color="cyan" />
         </Sphere>
-
         {lines}
-
-        <OrbitControls autoRotate autoRotateSpeed={0.5}/>
+        <OrbitControls autoRotate autoRotateSpeed={0.5} />
       </Canvas>
     </div>
-  )
+  );
 }
 
 function DataGrowth(){
@@ -475,41 +472,39 @@ function SuperheroStory(){
           )
           }
 
-          function SalaryCalculator(){
-
-            const [level,setLevel]=useState("Junior")
-            
-            const salaries={
-            Junior:"30k–55k MDL",
-            Middle:"45k–70k MDL",
-            Senior:"70k+ MDL"
-            }
-            
-            return(
-            
-            <div style={{marginTop:80}}>
-            
-            <h2>💰 Salarii IT Moldova</h2>
-            
-            <select
-            value={level}
-            onChange={(e)=>setLevel(e.target.value)}
-            >
-            
-            <option>Junior</option>
-            <option>Middle</option>
-            <option>Senior</option>
-            
-            </select>
-            
-            <p style={{marginTop:20,fontSize:24,color:"cyan"}}>
-            { salaries[level] }
-            </p>
-            
+          function SalaryCalculator() {
+          // 1. Создаем строгий тип для уровней
+          type Level = "Junior" | "Middle" | "Senior";
+          
+          const [level, setLevel] = useState<Level>("Junior");
+        
+          // 2. Указываем, что ключами объекта могут быть только значения из типа Level
+          const salaries: Record<Level, string> = {
+            Junior: "30k–55k MDL",
+            Middle: "45k–70k MDL",
+            Senior: "70k+ MDL"
+          };
+        
+          return (
+            <div style={{ marginTop: 80 }}>
+              <h2>💰 Salarii IT Moldova</h2>
+              <select
+                value={level}
+                // 3. Принудительно приводим значение из select к нашему типу Level
+                onChange={(e) => setLevel(e.target.value as Level)}
+                style={{ background: "#111", color: "white", padding: "10px", border: "1px solid cyan" }}
+              >
+                <option value="Junior">Junior</option>
+                <option value="Middle">Middle</option>
+                <option value="Senior">Senior</option>
+              </select>
+        
+              <p style={{ marginTop: 20, fontSize: 24, color: "cyan", fontWeight: "bold" }}>
+                {salaries[level]}
+              </p>
             </div>
-            
-            )
-            }
+          );
+        }
 
             function WhatToLearn(){
 
